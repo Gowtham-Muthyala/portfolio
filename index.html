@@ -482,7 +482,7 @@ a.tile:hover .go{color:var(--brass)}
       <article class="case">
         <div><h3>Self-service pricing dashboards</h3><p class="ctx">UK insurer, via TCS, 2025–now</p></div>
         <div><h4><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg>Problem</h4><p>Pricing teams wanted to explore data themselves rather than wait for a report to be produced.</p></div>
-        <div><h4><svg class="ic" aria-hidden="true"><use href="#i-tool"/></svg>What I built</h4><p>Self-service Streamlit and Plotly dashboards over warehouse, CSV and Parquet data, built quickly and iterated with the people using them.</p></div>
+        <div><h4><svg class="ic" aria-hidden="true"><use href="#i-tool"/></svg>What I built</h4><p>Self-service Streamlit and Plotly dashboards over warehouse, CSV and Parquet data, published to Posit Connect so business users can open them in a browser.</p></div>
         <div class="result"><h4><svg class="ic" aria-hidden="true"><use href="#i-trend"/></svg>Result</h4><b class="tnum">Days</b><span>to ship a working dashboard, not a full sprint</span></div>
       </article>
 
@@ -631,14 +631,14 @@ const PROJECTS = [
   { id:'synth', name:'Synthetic data engine', metric:'Weeks to under 15 minutes', body:'Config-driven multiprocessing simulation that generates stress-test datasets for repeatable CI regression runs.', uses:['python','multiproc','numpy','cicd','tdd'] },
   { id:'micro', name:'Pricing microservices', metric:'Monolith split into services', body:'FastAPI services with Redis caching and event-driven patterns for time-sensitive pricing and risk workflows.', uses:['fastapi','redis','docker','azure','cicd','python'] },
   { id:'telem', name:'Telematics risk pricing', metric:'Real-time driver risk scores', body:'Django platform scoring drivers with GLM and Random Forest, with a model-ops interface for actuaries.', uses:['django','glm','python','postgres','pandas'] },
-  { id:'dash', name:'Pricing dashboards', metric:'Dashboards in days, not sprints', body:'Self-service Streamlit reporting so pricing teams can explore data themselves.', uses:['python','pandas','snowflake','streamlit','sql'] },
+  { id:'dash', name:'Pricing dashboards', metric:'Dashboards in days, not sprints', body:'Self-service Streamlit reporting so pricing teams can explore data themselves.', uses:['python','pandas','snowflake','streamlit','sql','posit'] },
   { id:'vyoohi', name:'VYOOHI', metric:'Options analytics and backtesting', body:'Personal research platform: Black-Scholes pricing and Greeks, vectorised backtests and AsyncIO event processing on AWS.', uses:['python','asyncio','bs','lgbm','fastapi','redis','docker','aws','react','numpy','postgres'] },
 ];
 const TOOLS = {
   python:'Python', numpy:'NumPy', pandas:'Pandas', multiproc:'Multiprocessing', asyncio:'AsyncIO',
   fastapi:'FastAPI', django:'Django', redis:'Redis', snowflake:'Snowflake', postgres:'PostgreSQL', sql:'SQL',
   azure:'Azure', aws:'AWS ECS', docker:'Docker', cicd:'CI/CD', tdd:'TDD', sftp:'SFTP',
-  graph:'Dependency graphs', streamlit:'Streamlit / Plotly', glm:'GLM / Random Forest', bs:'Black-Scholes', lgbm:'LightGBM / PPO', react:'React',
+  graph:'Dependency graphs', streamlit:'Streamlit / Plotly', posit:'Posit Connect', glm:'GLM / Random Forest', bs:'Black-Scholes', lgbm:'LightGBM / PPO', react:'React',
 };
 const GLYPHS = {
   python:'M5 7l5 5-5 5M12.5 17H19',
@@ -664,6 +664,7 @@ const GLYPHS = {
   lgbm:'M12 3v5M12 8l-6 5M12 8l6 5M6 13v4M18 13v4M10 8a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
   react:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
   streamlit:'M4 20h16M7 16v-4M11 16V8M15 16v-6M19 16V5',
+  posit:'M12 15V4M8 8l4-4 4 4M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14',
 };
 function glyphTexture(id) {
   const S = 128, c = document.createElement('canvas'); c.width = c.height = S;
@@ -1215,11 +1216,12 @@ $('copy').addEventListener('click', async (e) => flash(e.currentTarget, await co
     docker:{ n:'Docker', x:1035, y:480, lab:'r', note:'Containers for every service, from laptop to cloud.' },
     streamlit:{ n:'Streamlit', x:690, y:420, lab:'b', note:'Self-service dashboards for exploring pricing data.' },
     plotly:{ n:'Plotly', x:800, y:466, lab:'r', note:'Interactive charts inside those dashboards.' },
+    posit:{ n:'Posit Connect', x:1015, y:560, lab:'b', note:'Where I publish the dashboards so business users can open them in a browser.' },
     aws:{ n:'AWS', x:1135, y:550, lab:'t', note:'ECS, S3 and Lambda, including for VYOOHI.' },
   };
   const LINES = [
     { id:'dash', name:'Pricing dashboards', color:'#F2A65A', off:24, metric:'days, not sprints', body:'Self-service Streamlit reporting so pricing teams can explore data themselves.',
-      stops:['snow','pandas','python','streamlit','plotly'] },
+      stops:['snow','pandas','python','streamlit','plotly','posit'] },
     { id:'pricing', name:'Pricing engine', color:'#D9B866', off:-16, metric:'30× faster', body:'Moved an actuarial pricing calculation from legacy tooling to vectorised Python, keeping an Excel interface for transparency.',
       stops:['vba','sql','python','numpy','mp','tdd','azure'] },
     { id:'calc', name:'No-code calc engine', color:'#86BFE0', off:-8, metric:'Weeks to 1 hour', body:'Actuaries define pricing logic in templates; a dependency-graph resolver orders and debugs every block.',
