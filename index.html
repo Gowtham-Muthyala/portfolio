@@ -321,6 +321,68 @@ a.tile:hover .go{color:var(--brass)}
 @media (max-width:900px){.metro-side{grid-template-columns:1fr}}
 @media (max-width:860px){.scroll-hint{display:block}}
 @media (max-width:520px){.legend{grid-template-columns:1fr}}
+
+/* ============================================================
+   PART 16 — MOBILE REFINEMENTS
+   ============================================================ */
+.metro > div,.metro-side > *{min-width:0}
+.hero > *,.stage,.inspector{min-width:0}
+.route .also .o{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.metro-mobile{display:none}
+@media (max-width:700px){
+  .metro-map,.scroll-hint,.metro-side{display:none}
+  .metro-mobile{display:block}
+}
+.mm-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;margin:0 calc(-1 * var(--pad)) 8px;padding-left:var(--pad);padding-right:var(--pad);scrollbar-width:none}
+.mm-chips::-webkit-scrollbar{display:none}
+.mm-chips button{flex:none;display:inline-flex;align-items:center;gap:8px;font:500 .875rem/1 var(--sans);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}
+.mm-chips button i{width:14px;height:4px;border-radius:2px;display:inline-block}
+.mm-chips button[aria-pressed="true"]{color:var(--deep);background:var(--text);border-color:var(--text)}
+.mm-head{margin:6px 0 18px}
+.mm-head h3{font-family:var(--serif);font-weight:400;font-size:1.75rem;line-height:1.1;margin:0 0 6px}
+.mm-head p{margin:0;color:var(--muted);font-size:.9375rem}
+.route{list-style:none;margin:0;padding:0;position:relative}
+.route::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;width:6px;border-radius:3px;background:var(--c)}
+.route li{position:relative;padding:0 0 22px 44px;min-height:28px}
+.route li:last-child{padding-bottom:0}
+.route .pin{position:absolute;left:4px;top:2px;width:20px;height:20px;border-radius:50%;background:var(--deep);border:4px solid var(--c)}
+.route li.x .pin{left:1px;top:-1px;width:26px;height:26px;background:var(--text);border:3px solid var(--deep);box-shadow:0 0 0 2px var(--text)}
+.route li.zone{padding-bottom:12px;min-height:0}
+.route li.zone span{display:inline-block;font-size:.75rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--petrol)}
+.route b{display:block;font-weight:600;font-size:1rem;line-height:1.3}
+.route p{margin:3px 0 0;color:var(--muted);font-size:.875rem;line-height:1.45}
+.route .also{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;font-size:.75rem;color:var(--muted)}
+.route .also i{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+@media (max-width:980px){
+  .picker{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -22px;padding:0 22px 2px}
+  .picker::-webkit-scrollbar{display:none}
+  .picker button{flex:none}
+  .inspector p#ins-body{display:none}
+}
+@media (max-width:760px){
+  .sec{padding:64px 0}
+  .sec-head{margin-bottom:28px}
+  .sec-head p{font-size:1rem}
+  .contact{padding-top:72px}
+  .hero-copy{padding-top:32px}
+  .hero h1{margin-bottom:20px}
+  .hint{font-size:.75rem}
+  #graph,#labels{height:360px}
+  .stage{margin-top:8px}
+  .case{padding:28px 0;gap:18px}
+  .case h3{font-size:1.65rem}
+  .case .result b{font-size:2.2rem}
+  .scrub{padding:20px}
+  .scrub-now{min-height:0}
+  .scrub-now .date{font-size:2.6rem}
+  .years span{font-size:.6875rem}
+  .years span:nth-child(even){display:none}
+  .globe-wrap{max-width:340px;margin-top:8px}
+  .composer{margin-top:56px;padding-top:40px}
+  .composer h3{font-size:1.85rem}
+  .foot{margin-top:56px}
+}
 </style>
 </head>
 <body>
@@ -475,6 +537,7 @@ a.tile:hover .go{color:var(--brass)}
             </svg>
           </div>
           <p class="scroll-hint">Scroll sideways to see the whole map.</p>
+          <div class="metro-mobile" id="metro-mobile" aria-label="Stack, one project line at a time"></div>
           <p class="metro-foot"><b>Also on the network:</b> Polars, React, TypeScript, Jenkins, SonarQube, GLM and Random Forest.</p>
         </div>
         <div class="metro-side">
@@ -812,7 +875,7 @@ const $ = (id) => document.getElementById(id);
     const r = host.getBoundingClientRect();
     renderer.setSize(Math.max(1, r.width), Math.max(1, r.height), false);
     camera.aspect = Math.max(1, r.width) / Math.max(1, r.height);
-    dist = r.width < 600 ? 17 : 18;
+    dist = r.width < 600 ? 15 : 18;
     camera.updateProjectionMatrix(); requestRender();
   }
   new ResizeObserver(resize).observe(host);
@@ -831,7 +894,7 @@ const $ = (id) => document.getElementById(id);
     if (idle) { rotY += 0.0018; anim = true; }
     world.rotation.set(rotX, rotY, 0);
     const wide = host.clientWidth > 700;
-    const cx = wide ? 1.1 : 0, cy = wide ? -2.1 : 0.2;
+    const cx = wide ? 1.1 : 0, cy = wide ? -2.1 : -0.6;
     camera.position.set(cx, cy, dist); camera.lookAt(cx, cy, 0);
     world.updateMatrixWorld(true);
     nodes.forEach((n) => { if (n.ring) n.ring.lookAt(camera.position); });
@@ -845,7 +908,8 @@ const $ = (id) => document.getElementById(id);
       const x = (v.x * 0.5 + 0.5) * r.width + ox, y = (-v.y * 0.5 + 0.5) * r.height + oy;
       const off = n.kind === 'proj' ? 22 : -33;
       n.el.style.transform = `translate(${x.toFixed(1)}px, ${(y - off).toFixed(1)}px) translate(-50%,-50%)`;
-      n.el.style.opacity = (n.el.classList.contains('dim') || (n.kind === 'tool' && !n.hub && !n.el.classList.contains('show'))) ? '' : String(Math.max(0.35, Math.min(1, 0.65 + depth / 7)) * Math.min(1, intro * 1.5));
+      const narrowHide = r.width < 600 && n.kind === 'proj' && focusId !== n.id;
+      n.el.style.opacity = narrowHide ? '0' : (n.el.classList.contains('dim') || (n.kind === 'tool' && !n.hub && !n.el.classList.contains('show'))) ? '' : String(Math.max(0.35, Math.min(1, 0.65 + depth / 7)) * Math.min(1, intro * 1.5));
       n.el.style.zIndex = String(Math.round(100 + depth * 10));
     });
     needsRender = false;
@@ -1255,6 +1319,36 @@ $('copy').addEventListener('click', async (e) => flash(e.currentTarget, await co
     }
   }
   select({});
+
+  // Mobile: one line at a time, drawn top to bottom
+  const mm = $('metro-mobile');
+  const zoneOf = (x) => (ZONES.find((z) => x >= z.x0 && x < z.x1) || ZONES[ZONES.length - 1]).name;
+  const chips = document.createElement('div'); chips.className = 'mm-chips'; chips.setAttribute('role', 'group'); chips.setAttribute('aria-label', 'Choose a project line');
+  const head = document.createElement('div'); head.className = 'mm-head';
+  const route = document.createElement('ol'); route.className = 'route';
+  mm.append(chips, head, route);
+  function showLine(id) {
+    const l = LINES.find((x) => x.id === id);
+    [...chips.children].forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+    head.innerHTML = `<h3>${l.name}</h3><p>${l.body}</p>`;
+    route.style.setProperty('--c', l.color);
+    let lastZone = null, html = '';
+    l.stops.forEach((k) => {
+      const st = ST[k], z = zoneOf(st.x);
+      if (z !== lastZone) { html += `<li class="zone"><span>${z}</span></li>`; lastZone = z; }
+      const others = st.lines.filter((o) => o.id !== l.id);
+      const also = others.length ? `<span class="also">Change for ${others.map((o) => `<span class="o"><i style="background:${o.color}"></i>${o.name}</span>`).join('')}</span>` : '';
+      html += `<li class="${others.length ? 'x' : ''}"><span class="pin"></span><b>${st.n}</b><p>${st.note}</p>${also}</li>`;
+    });
+    route.innerHTML = html;
+  }
+  LINES.forEach((l) => {
+    const b = document.createElement('button'); b.type = 'button'; b.dataset.id = l.id;
+    b.innerHTML = `<i style="background:${l.color}"></i>${l.name}`;
+    b.addEventListener('click', () => showLine(l.id));
+    chips.appendChild(b);
+  });
+  showLine('pricing');
 
   // Trains: one per line, looping gently
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
